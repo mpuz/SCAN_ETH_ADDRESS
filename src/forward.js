@@ -12,12 +12,14 @@ client.on('connect', function () {
 client.connect();
 
 //INFURA WAS USED DURING TESTING - NOT TO USE IN PRODUCTION, USE FULL NODE INSTEAD
-const INFURA = process.env.INFURA //API TOKEN
-const INFURA_WS = `wss://mainnet.infura.io/ws/v3/${INFURA}`
-const web3 = new Web3(new Web3.providers.WebsocketProvider(INFURA_WS))
+// const INFURA = process.env.INFURA //API TOKEN
+// const INFURA_WS = `wss://mainnet.infura.io/ws/v3/${INFURA}`
+// const web3 = new Web3(new Web3.providers.WebsocketProvider(INFURA_WS))
 
-//LIGHT NODE - NO PEERS
-//var web3 = new Web3(new Web3.providers.WebsocketProvider('ws://127.0.0.1:8546')); // local GETH light client
+//LIGHT NODE - OFTEN NO PEERS
+var web3 = new Web3(new Web3.providers.WebsocketProvider('ws://127.0.0.1:8546')); // local GETH light client
+
+
 
 
 

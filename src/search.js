@@ -1,46 +1,52 @@
 const { getBlock } = require('./getblock')
 
+
+const arguments = process.argv.splice(2);
+console.log('Searching', arguments)
+
+
 const redis = require('redis');
 const client = redis.createClient();
 client.on('connect', function () {
     console.log('Redis Connected');
-
-    //search("0x4147964d23fAA70aD6e790fBbc61afdfeDa4dD94", 14755348)
-
 }).on('error', function (error) {
     console.log(error);
 });
-client.connect();
+
+
 
 
 const search = async (addr, blockNum) => {
-    console.log('Searching in', blockNum.toString())
-    let cache = await client.lRange(blockNum.toString(), 0, -1)
+    await client.connect();
+    console.log('Searching in', blockNum + "")
+    let cache = await client.lRange(blockNum + "", 0, -1)
     if (cache.length) {
         let found = cache.includes(addr)
+        client.quit()
         if (found) {
             console.log("Found in", blockNum)
             return blockNum
         } else {
-            console.log('Not in', blockNum.toString())
+            console.log('Not in', blockNum + "")
         }
-        client.quit()
     } else {
         console.log('Not in cache')
         let result = await getBlock(blockNum, client)
         let found = result.includes(addr)
+        client.quit()
         if (found) {
             console.log("Found in", blockNum)
             return blockNum
         } else {
-            console.log('Not in', blockNum.toString())
+            console.log('Not in', blockNum + "")
+            return null
         }
-        client.quit()
 
     }
 }
 
 
 
+search(arguments[0], arguments[1])
 
 
