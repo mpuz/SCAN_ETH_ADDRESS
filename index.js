@@ -11,10 +11,12 @@ client.on('connect', function () {
 client.connect();
 
 //INFURA WAS USED DURING TESTING - NOT TO USE IN PRODUCTION, USE FULL NODE INSTEAD
-const INFURA = process.env.INFURA
-const INFURA_WS = `wss://mainnet.infura.io/ws/v3/${INFURA}`
-const web3 = new Web3(new Web3.providers.WebsocketProvider(INFURA_WS))
-//var web3 = new Web3(Web3.givenProvider || 'http://127.0.0.1:8545'); // local GETH light client
+//const INFURA = process.env.INFURA //API TOKEN
+//const INFURA_WS = `wss://mainnet.infura.io/ws/v3/${INFURA}`
+//const web3 = new Web3(new Web3.providers.WebsocketProvider(INFURA_WS))
+
+//LIGHT NODE - NO PEERS
+var web3 = new Web3(new Web3.providers.WebsocketProvider('ws://127.0.0.1:8546')); // local GETH light client
 
 
 
@@ -45,7 +47,7 @@ const main = async (blockNum) => {
 
             //PUSH TO REDIS - {BLOCKNUMBER : [ARRAY OF ADDRESSES]}
             client.RPUSH(blockNum.toString(), ...sortedAddresses, function (err, reply) {
-                if (!err) { console.log(reply); } // 2
+                if (!err) { console.log(reply); }
                 else { console.log(err) }
             });
         })
@@ -59,7 +61,6 @@ const main = async (blockNum) => {
 //SUBSCRIBE ON THE NEW BLOCK EVENT
 web3.eth.subscribe('newBlockHeaders', (error, result) => {
     if (!error) {
-        //console.log(result);
         return;
     }
     console.error(error);
@@ -69,7 +70,7 @@ web3.eth.subscribe('newBlockHeaders', (error, result) => {
     })
     .on("data", function (blockHeader) {
         console.log('Got new block', blockHeader.number);
-        //GET ADDRESSES
+        //FETCH ADDRESSES FROM BLOCK
         main(blockHeader.number)
     })
     .on("error", console.error);
