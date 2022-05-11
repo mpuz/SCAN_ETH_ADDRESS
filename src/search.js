@@ -18,8 +18,8 @@ client.on('connect', function () {
 
 const search = async (addr, blockNum) => {
     await client.connect();
-    console.log('Searching in', blockNum + "")
-    let cache = await client.lRange(blockNum + "", 0, -1)
+    console.log('Searching in', String(blockNum))
+    let cache = await client.lRange(String(blockNum), 0, -1)
     if (cache.length) {
         let found = cache.includes(addr)
         client.quit()
@@ -27,7 +27,7 @@ const search = async (addr, blockNum) => {
             console.log("Found in", blockNum)
             return blockNum
         } else {
-            console.log('Not in', blockNum + "")
+            console.log('Not in', String(blockNum))
         }
     } else {
         console.log('Not in cache')
@@ -38,7 +38,7 @@ const search = async (addr, blockNum) => {
             console.log("Found in", blockNum)
             return blockNum
         } else {
-            console.log('Not in', blockNum + "")
+            console.log('Not in', String(blockNum))
             return null
         }
 

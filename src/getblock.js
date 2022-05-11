@@ -40,7 +40,7 @@ const getBlock = async (blockNum, client) => {
             let sortedAddresses = Array.from(new Set(addrs)).sort()
             console.log('Cached', sortedAddresses.length, 'addresses');
             //PUSH TO REDIS - {BLOCKNUMBER : [ARRAY OF ADDRESSES]}
-            client.RPUSH(blockNum.toString(), sortedAddresses, function (err, reply) {
+            client.RPUSH(String(blockNum), sortedAddresses, function (err, reply) {
                 if (!err) { console.log(reply); }
                 else { console.log(err) }
             });
