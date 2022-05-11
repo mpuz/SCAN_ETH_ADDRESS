@@ -41,5 +41,4 @@ web3.eth.subscribe('newBlockHeaders', (error, result) => {
     .on("error", console.error);
 
 
-//main()
 
