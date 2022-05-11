@@ -10,7 +10,9 @@ client.on('connect', function () {
 });
 client.connect();
 
-const INFURA_WS = "wss://mainnet.infura.io/ws/v3/b25250f990fe413c87d0c51c6d6de752"
+//INFURA WAS USED DURING TESTING - NOT TO USE IN PRODUCTION, USE FULL NODE INSTEAD
+const INFURA = process.env.INFURA
+const INFURA_WS = `wss://mainnet.infura.io/ws/v3/${INFURA}`
 const web3 = new Web3(new Web3.providers.WebsocketProvider(INFURA_WS))
 //var web3 = new Web3(Web3.givenProvider || 'http://127.0.0.1:8545'); // local GETH light client
 
@@ -37,6 +39,7 @@ const main = async (blockNum) => {
     }
     Promise.all(promises)
         .then(() => {
+            //SORT FOR FASTER SEARCH
             let sortedAddresses = addrs.sort()
             console.log('Found ', sortedAddresses.length, 'addresses');
 
