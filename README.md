@@ -58,3 +58,5 @@ node ./src/search.js <addresstosearch> <blocknumbertosearchat>
 для работы, естественно, нужен nodejs...
 перед запуском в папке с package.json запустить 
 ```npm i```
+
+5. Опыта с RabbitMQ нет, пример приема на nodeJS с библиотекой amqplib положил в папку rabbitconsume
