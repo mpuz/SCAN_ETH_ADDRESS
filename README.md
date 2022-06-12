@@ -1,59 +1,55 @@
 # TEST
 
-Для работы неоходимо установить NodeJS, Redis и Geth. 
-Установка Geth:
-1. Добавить репозиторий - 
+Install NodeJS, Redis and Geth. 
+- Geth:
+1. Add repo - 
 ```
 sudo add-apt-repository -y ppa:ethereum/ethereum
 ```
-2. Поставить стабильную версию - 
+2. Install stable version - 
 ```
 sudo apt-get update
 sudo apt-get install ethereum
 ```
-3. Запустить в лайт режиме - 
+3. Run in lite mode - 
 ```
 geth --syncmode=light --ws --ws.port=8546  --http --http.port=8545 --http.api="eth,net,web3"
 ```
-Geth когда запущен в light моде -  часто теряет пиры, пишет в консоль peercount=0 и перестает отдавать новые блоки, поэтому в продакшн версии необходимо либо использовать full ноду, либо использовать API сторонних провайдеров.
-Я использовал API infura.io, надо сделать там аккаунт и создать токен. до 100тыс запросов в день там бесплатно. Еще geth можно поставить в контейнере Docker- ом.. Как впрочем и Redis и Node.
+Geth often looses peer when in lite моде -  so, use full node in production or call therd party APIs (f.i. infura.io)
 
-4. Redis  из исходников
+4. Redis
 
-1. Загрузить исходники
+1. Download sources
 ```
 wget https://download.redis.io/redis-stable.tar.gz
 ```
 
-2. Распаковать и скомпилировать
+2. Unpack and compile
 ```
 tar -xzvf redis-stable.tar.gz
 cd redis-stable
 make
 ```
 
-3. Если не собираетесь удалять после опытов, то 
+3. Install to bin
 ```
 make install
 ```
 
-поставит все в /usr/local/bin, 
-запустить - ```redis-server```
+it will move to /usr/local/bin, 
+run - ```redis-server```
 
-консоль в редисе - ```redis-cli```
-консоль в geth - ```geth attach```
+redis console - ```redis-cli```
+geth console - ```geth attach```
 
-4. В папке  ./src файл search.js запускается с параметрами - 
+4.there is a file  ./src/search.js , should be run with params - 
 ```
 node ./src/search.js <addresstosearch> <blocknumbertosearchat>
 ```
 
-если нужного блока нет в кэше  - после этого запроса он там останется и повторный запрос выдаст ответ намного быстрее
 
-файл ./src/forward.js - утилита для считывания всех новых блоков (адресов транзакций из них) в кэш - при запуске подписывается на вебсокет "новыйблок" , считывает транзакции, собирает адреса и пишет в кэш.
+ ./src/forward.js - utility for reading blocks into cache forward.
 
-файл ./src/backward.js - TODO (недоделан) - считывает блоки в прошлое и записывает содержимое в кэш
+./src/backward.js - TODO utility for reading blocks into cache backward
 
-для работы, естественно, нужен nodejs...
-перед запуском в папке с package.json запустить 
-```npm i```
+
